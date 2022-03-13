@@ -3,9 +3,11 @@
 module Routes2spec
   class RequestSpecFormatter
     def initialize
+      @results = []
     end
 
     def result
+      @results.flatten
     end
 
     def section_title(title)
@@ -14,7 +16,7 @@ module Routes2spec
     def section(routes)
       grouped = routes.group_by { |r| r[:reqs].split("#").first }
       Routes2spec.log_debug grouped
-      grouped.each do |controller, routes|
+      @results << grouped.map do |controller, routes|
         next unless routes.first[:reqs].include?("#")
 
         namespaces = controller.split("/")
@@ -23,7 +25,6 @@ module Routes2spec
           Routes2spec.log_debug "No name!"
           next
         end
-
         routes = routes.map do |r|
           verb = r[:verb]&.downcase # GET|POST
           path = r[:path].gsub("(.:format)", "")
@@ -52,21 +53,13 @@ module Routes2spec
           )
         end.compact
         template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/request_spec.rb.erb"))
-        result = ERB.new(File.read(template_path)).result(binding)
-        outfile = Rails.root.join("spec/requests", *namespaces, "#{name.underscore}_spec.rb")
-        FileUtils.mkdir_p(File.dirname(outfile))
-        if File.exist?(outfile)
-          Routes2spec.log "Already exists: #{outfile}"
-          # print "Overwrite? (y/n) "
-          # res = STDIN.gets.chomp
-          # if res.downcase == "y"
-          #   File.write(outfile, result, mode: "w")
-          # end
-        else
-          Routes2spec.log "Generating: #{outfile}"
-          File.write(outfile, result, mode: "w")
-        end
-      end
+        content = ERB.new(File.read(template_path)).result(binding)
+        {
+          name: name,
+          namespaces: namespaces,
+          content: content,
+        }
+      end.compact
     end
 
     def header(routes)

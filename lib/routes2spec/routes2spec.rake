@@ -36,7 +36,22 @@ namespace :routes do
 
     end.parse!(ARGV.reject { |x| x == "routes" })
 
-    puts inspector.format(Routes2spec::RequestSpecFormatter.new, routes_filter)
+    results = inspector.format(Routes2spec::RequestSpecFormatter.new, routes_filter)
+    results.each do |result|
+      outfile = Rails.root.join("spec/requests", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
+      FileUtils.mkdir_p(File.dirname(outfile))
+      if File.exist?(outfile)
+        Routes2spec.log "Already exists: #{outfile}"
+        # print "Overwrite? (y/n) "
+        # res = STDIN.gets.chomp
+        # if res.downcase == "y"
+        #   File.write(outfile, result[:content], mode: "w")
+        # end
+      else
+        Routes2spec.log "Generating: #{outfile}"
+        File.write(outfile, result[:content], mode: "w")
+      end
+    end
 
     exit 0 # ensure extra arguments aren't interpreted as Rake tasks
   end
