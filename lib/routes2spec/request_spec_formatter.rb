@@ -13,14 +13,14 @@ module Routes2spec
 
     def section(routes)
       grouped = routes.group_by { |r| r[:reqs].split("#").first }
-      puts grouped
+      Routes2spec.log_debug grouped
       grouped.each do |controller, routes|
         next unless routes.first[:reqs].include?("#")
 
         namespaces = controller.split("/")
         name = namespaces.pop
         unless name
-          puts "No name!"
+          Routes2spec.log_debug "No name!"
           next
         end
 
@@ -29,11 +29,11 @@ module Routes2spec
           path = r[:path].gsub("(.:format)", "")
           path_helper = r[:name]
           unless path_helper
-            puts "No path name!"
+            Routes2spec.log_debug "No path name!"
             next
           end
           unless %w[get post patch put delete].include?(verb)
-            puts "Unsupported verb! #{verb}"
+            Routes2spec.log_debug "Unsupported verb! #{verb}"
             next
           end
           status =
@@ -56,14 +56,14 @@ module Routes2spec
         outfile = Rails.root.join("spec/requests", *namespaces, "#{name.underscore}_spec.rb")
         FileUtils.mkdir_p(File.dirname(outfile))
         if File.exist?(outfile)
-          puts "Already exists: #{outfile}"
+          Routes2spec.log "Already exists: #{outfile}"
           # print "Overwrite? (y/n) "
           # res = STDIN.gets.chomp
           # if res.downcase == "y"
           #   File.write(outfile, result, mode: "w")
           # end
         else
-          puts "Generating: #{outfile}"
+          Routes2spec.log "Generating: #{outfile}"
           File.write(outfile, result, mode: "w")
         end
       end
