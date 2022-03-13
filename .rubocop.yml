@@ -1,5 +1,23 @@
+require:
+  - rubocop-rake
+  - rubocop-rspec
+  - rubocop-rubycw
+
 AllCops:
   TargetRubyVersion: 2.7
+  NewCops: enable
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  ExtraDetails: true
+  Exclude:
+    - 'spec/dummy/**/*'
+    - 'vendor/bundle/**/*'
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
 
 Style/StringLiterals:
   Enabled: true
@@ -9,5 +27,33 @@ Style/StringLiteralsInInterpolation:
   Enabled: true
   EnforcedStyle: double_quotes
 
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
 Layout/LineLength:
   Max: 120
+  Exclude:
+    - '*.gemspec'
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/MethodLength:
+  Max: 15
+
+# DisabledByDefault for RSpec
+RSpec:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: true
+
+RSpec/VerifiedDoubles:
+  Enabled: true
