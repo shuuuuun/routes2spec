@@ -16,6 +16,9 @@ AllCops:
 Style/ClassAndModuleChildren:
   Enabled: false
 
+Style/EmptyMethod:
+  Enabled: false
+
 Style/Lambda:
   Enabled: false
 
