@@ -28,8 +28,8 @@ module Routes2spec
         routes = routes.map do |r|
           verb = r[:verb]&.downcase # GET|POST
           path = r[:path].gsub("(.:format)", "")
-          path_helper = r[:name]
-          unless path_helper
+          path_helper = r[:name] || ""
+          if path_helper.empty?
             Routes2spec.log_debug "No path name!"
             next
           end
