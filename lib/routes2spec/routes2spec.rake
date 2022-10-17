@@ -3,15 +3,18 @@
 # https://github.com/rails/rails/blob/5-2-stable/railties/lib/rails/tasks/routes.rake
 
 require "optparse"
-require "thor"
+# require "thor"
 require_relative "./request_spec_formatter"
+require_relative "./routes_inspector"
 
 namespace :routes do
   desc "Generate request specs for all defined routes in match order, with names. Target specific controller with -c option, or grep routes using -g option"
   task request_spec: :environment do
     all_routes = Rails.application.routes.routes
+    # pp all_routes.class
     require "action_dispatch/routing/inspector"
-    inspector = ActionDispatch::Routing::RoutesInspector.new(all_routes)
+    # inspector = ActionDispatch::Routing::RoutesInspector.new(all_routes)
+    inspector = Routes2spec::RoutesInspector.new(all_routes)
 
     routes_filter = nil
 
