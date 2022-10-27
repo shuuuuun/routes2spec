@@ -2,8 +2,9 @@
 
 module Routes2spec
   class RequestSpecFormatter
-    def initialize
+    def initialize(opts = {})
       @results = []
+      @opts = opts
     end
 
     def result
@@ -46,6 +47,17 @@ module Routes2spec
             else
               200
             end
+          if @opts[:symbol_status]
+            status =
+              case verb
+              when "post"
+                ":created"
+              when "delete"
+                ":no_content"
+              else
+                ":ok"
+              end
+          end
           r.merge(
             path: path,
             path_helper: path_helper,

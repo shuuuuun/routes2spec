@@ -14,6 +14,9 @@ namespace :routes do
     inspector = ActionDispatch::Routing::RoutesInspector.new(all_routes)
 
     routes_filter = nil
+    formatter_opts = {
+      symbol_status: false,
+    }
 
     OptionParser.new do |opts|
       opts.banner = "Usage: rails routes:request_spec [options]"
@@ -39,9 +42,12 @@ namespace :routes do
       #   routes_filter = pattern
       # end
 
+      opts.on("--symbol-status") do |boolean|
+        formatter_opts[:symbol_status] = boolean
+      end
     end.parse!(ARGV.reject { |x| x == "routes:request_spec" }.reject { |x| x == "--" })
 
-    results = inspector.format(Routes2spec::RequestSpecFormatter.new, routes_filter)
+    results = inspector.format(Routes2spec::RequestSpecFormatter.new(formatter_opts), routes_filter)
     results.each do |result|
       outfile = Rails.root.join("spec/requests", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
       FileUtils.mkdir_p(File.dirname(outfile))
