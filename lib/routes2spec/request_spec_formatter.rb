@@ -2,6 +2,17 @@
 
 module Routes2spec
   class RequestSpecFormatter
+    STATUS = {
+      get: 200,
+      post: 201,
+      delete: 204,
+    }.freeze
+    SYMBOL_STATUS = {
+      get: ":ok",
+      post: ":created",
+      delete: ":no_content",
+    }.freeze
+
     def initialize(opts = {})
       @results = []
       @opts = opts
@@ -38,26 +49,7 @@ module Routes2spec
             Routes2spec.log_debug "Unsupported verb! #{verb}"
             next
           end
-          status =
-            case verb
-            when "post"
-              201
-            when "delete"
-              204
-            else
-              200
-            end
-          if @opts[:symbol_status]
-            status =
-              case verb
-              when "post"
-                ":created"
-              when "delete"
-                ":no_content"
-              else
-                ":ok"
-              end
-          end
+          status = @opts[:symbol_status] ? SYMBOL_STATUS.fetch(verb.to_sym, ":ok") : STATUS.fetch(verb.to_sym, 200)
           r.merge(
             path: path,
             path_helper: path_helper,
