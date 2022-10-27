@@ -20,6 +20,11 @@ namespace :routes do
 
       Rake.application.standard_rake_options.each { |args| opts.on(*args) }
 
+      opts.on("-V", "--version") do
+        STDERR.puts "Routes2spec: #{Routes2spec::VERSION}"
+        exit 0
+      end
+
       opts.on("-c CONTROLLER") do |controller|
         routes_filter = { controller: controller }
       end
