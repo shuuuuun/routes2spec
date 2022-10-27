@@ -37,16 +37,16 @@ module Routes2spec
         next unless routes.first[:reqs].include?("#")
 
         namespaces = controller.split("/")
-        name = namespaces.pop
-        unless name
-          Routes2spec.log_debug "No name!"
+        controller_name = namespaces.pop
+        unless controller_name
+          Routes2spec.log_debug "No controller name! #{namespaces}"
           next
         end
         routes = routes.map do |r|
           verb = r[:verb]&.downcase # GET|POST
           path = r[:path].gsub("(.:format)", "")
-          path_helper = r[:name] || ""
-          if path_helper.empty?
+          path_name = r[:name] || ""
+          if path_name.empty?
             Routes2spec.log_debug "No path name!"
             next
           end
@@ -57,14 +57,14 @@ module Routes2spec
           status = @opts[:symbol_status] ? SYMBOL_STATUS[verb.to_sym] : STATUS[verb.to_sym]
           r.merge(
             path: path,
-            path_helper: path_helper,
+            path_name: path_name,
             status: status,
           )
         end.compact
         template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/request_spec.rb.erb"))
         content = ERB.new(File.read(template_path)).result(binding)
         {
-          name: name,
+          name: controller_name,
           namespaces: namespaces,
           content: content,
         }
