@@ -46,6 +46,8 @@ module Routes2spec
           verb = r[:verb]&.downcase # GET|POST
           path = r[:path].gsub("(.:format)", "")
           path_name = r[:name] || ""
+          path_name = routes.find{ _1[:path] == r[:path] && !_1[:name].empty? }&.fetch(:name) || "" if path_name.empty?
+          Routes2spec.log_debug "verb: #{verb}, path: #{path}, path_name: #{path_name}"
           if path_name.empty?
             Routes2spec.log_debug "No path name!"
             next
