@@ -39,7 +39,7 @@ namespace :routes do
       #   routes_filter = pattern
       # end
 
-    end.parse!(ARGV.reject { |x| x == "routes" }.reject { |x| x == "--" })
+    end.parse!(ARGV.reject { |x| x == "routes:request_spec" }.reject { |x| x == "--" })
 
     results = inspector.format(Routes2spec::RequestSpecFormatter.new, routes_filter)
     results.each do |result|
