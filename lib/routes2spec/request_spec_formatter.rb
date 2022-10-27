@@ -6,12 +6,13 @@ module Routes2spec
       get: 200,
       post: 201,
       delete: 204,
-    }.freeze
+    }.tap{ _1.default = 200 }.freeze
+
     SYMBOL_STATUS = {
       get: ":ok",
       post: ":created",
       delete: ":no_content",
-    }.freeze
+    }.tap{ _1.default = ":ok" }.freeze
 
     def initialize(opts = {})
       @results = []
@@ -49,7 +50,7 @@ module Routes2spec
             Routes2spec.log_debug "Unsupported verb! #{verb}"
             next
           end
-          status = @opts[:symbol_status] ? SYMBOL_STATUS.fetch(verb.to_sym, ":ok") : STATUS.fetch(verb.to_sym, 200)
+          status = @opts[:symbol_status] ? SYMBOL_STATUS[verb.to_sym] : STATUS[verb.to_sym]
           r.merge(
             path: path,
             path_helper: path_helper,
