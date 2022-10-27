@@ -5,12 +5,16 @@ module Routes2spec
     STATUS = {
       get: 200,
       post: 201,
+      patch: 200,
+      put: 200,
       delete: 204,
     }.tap{ _1.default = 200 }.freeze
 
     SYMBOL_STATUS = {
       get: ":ok",
       post: ":created",
+      patch: ":ok",
+      put: ":ok",
       delete: ":no_content",
     }.tap{ _1.default = ":ok" }.freeze
 
