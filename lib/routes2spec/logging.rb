@@ -8,7 +8,7 @@ module Routes2spec
     end
 
     def log_debug(message)
-      warn("[Routes2spec] #{message}") if debug?
+      warn("[Routes2spec][debug] #{message}") if debug?
     end
 
     def log(message)
