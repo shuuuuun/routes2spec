@@ -13,7 +13,11 @@ namespace :routes do
     require "action_dispatch/routing/inspector"
     inspector = ActionDispatch::Routing::RoutesInspector.new(all_routes)
 
-    routes_filter = nil
+    if Rails::VERSION::MAJOR > 5
+      routes_filter = {}
+    else
+      routes_filter = nil
+    end
     formatter_opts = {
       symbol_status: false,
     }
@@ -33,7 +37,11 @@ namespace :routes do
       end
 
       opts.on("-g PATTERN") do |pattern|
-        routes_filter = pattern
+        if Rails::VERSION::MAJOR > 5
+          routes_filter = { grep: pattern }
+        else
+          routes_filter = pattern
+        end
       end
 
       # -v, --invert-match
