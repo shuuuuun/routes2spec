@@ -18,6 +18,7 @@ namespace :routes do
     else
       routes_filter = nil
     end
+    overwrite = false
     force_overwrite = false
     formatter_opts = {
       symbol_status: false,
@@ -33,6 +34,9 @@ namespace :routes do
         exit 0
       end
 
+      opts.on("--overwrite") do |boolean|
+        overwrite = boolean
+      end
       opts.on("--force-overwrite") do |boolean|
         force_overwrite = boolean
       end
@@ -65,15 +69,18 @@ namespace :routes do
       outfile = Rails.root.join("spec/requests", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
       FileUtils.mkdir_p(File.dirname(outfile))
       if File.exist?(outfile)
-        Routes2spec.log "Already exists: #{outfile}"
-        # print "Overwrite? (y/n) "
-        # res = STDIN.gets.chomp
-        # if res.downcase == "y"
-        #   File.write(outfile, result[:content], mode: "w")
-        # end
         if force_overwrite
           Routes2spec.log "Overwriting: #{outfile}"
           File.write(outfile, result[:content], mode: "w")
+        else
+          Routes2spec.log "Already exists: #{outfile}"
+          if overwrite
+            print "Overwrite? (y/n) "
+            res = STDIN.gets.chomp
+            if res.downcase == "y"
+              File.write(outfile, result[:content], mode: "w")
+            end
+          end
         end
       else
         Routes2spec.log "Generating: #{outfile}"
