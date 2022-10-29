@@ -68,28 +68,31 @@ namespace :routes do
     results.each do |result|
       outfile = Rails.root.join("spec/requests", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
       FileUtils.mkdir_p(File.dirname(outfile))
-      if File.exist?(outfile)
-        if force_overwrite
-          Routes2spec.log "Overwriting: #{outfile}"
-          File.write(outfile, result[:content], mode: "w")
-        else
-          Routes2spec.log "Already exists: #{outfile}"
-          if overwrite
-            print "Overwrite? (y/n/q) "
-            res = $stdin.gets.chomp
-            case res.downcase
-            when "y"
-              File.write(outfile, result[:content], mode: "w")
-            when "q"
-              exit 0
-            else
-              next
-            end
-          end
-        end
-      else
+
+      unless File.exist?(outfile)
         Routes2spec.log "Generating: #{outfile}"
         File.write(outfile, result[:content], mode: "w")
+        next
+      end
+
+      if force_overwrite
+        Routes2spec.log "Overwriting: #{outfile}"
+        File.write(outfile, result[:content], mode: "w")
+        next
+      end
+
+      Routes2spec.log "Already exists: #{outfile}"
+      if overwrite
+        print "Overwrite? (y/n/q) "
+        res = $stdin.gets.chomp
+        case res.downcase
+        when "y"
+          File.write(outfile, result[:content], mode: "w")
+        when "q"
+          exit 0
+        else
+          next
+        end
       end
     end
 
