@@ -75,10 +75,15 @@ namespace :routes do
         else
           Routes2spec.log "Already exists: #{outfile}"
           if overwrite
-            print "Overwrite? (y/n) "
+            print "Overwrite? (y/n/q) "
             res = STDIN.gets.chomp
-            if res.downcase == "y"
+            case res.downcase
+            when "y"
               File.write(outfile, result[:content], mode: "w")
+            when "q"
+              exit 0
+            else
+              next
             end
           end
         end
