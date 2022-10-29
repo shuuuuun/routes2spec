@@ -30,7 +30,7 @@ namespace :routes do
       Rake.application.standard_rake_options.each { |args| opts.on(*args) }
 
       opts.on("-V", "--version") do
-        STDERR.puts "Routes2spec: #{Routes2spec::VERSION}"
+        $stdout.puts "Routes2spec: #{Routes2spec::VERSION}"
         exit 0
       end
 
@@ -76,7 +76,7 @@ namespace :routes do
           Routes2spec.log "Already exists: #{outfile}"
           if overwrite
             print "Overwrite? (y/n/q) "
-            res = STDIN.gets.chomp
+            res = $stdin.gets.chomp
             case res.downcase
             when "y"
               File.write(outfile, result[:content], mode: "w")
