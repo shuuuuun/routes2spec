@@ -18,6 +18,7 @@ namespace :routes do
     else
       routes_filter = nil
     end
+    force_overwrite = false
     formatter_opts = {
       symbol_status: false,
     }
@@ -30,6 +31,10 @@ namespace :routes do
       opts.on("-V", "--version") do
         STDERR.puts "Routes2spec: #{Routes2spec::VERSION}"
         exit 0
+      end
+
+      opts.on("--force-overwrite") do |boolean|
+        force_overwrite = boolean
       end
 
       opts.on("-c CONTROLLER") do |controller|
@@ -66,6 +71,10 @@ namespace :routes do
         # if res.downcase == "y"
         #   File.write(outfile, result[:content], mode: "w")
         # end
+        if force_overwrite
+          Routes2spec.log "Overwriting: #{outfile}"
+          File.write(outfile, result[:content], mode: "w")
+        end
       else
         Routes2spec.log "Generating: #{outfile}"
         File.write(outfile, result[:content], mode: "w")
