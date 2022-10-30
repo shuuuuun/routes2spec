@@ -62,7 +62,13 @@ module Routes2spec
     end
 
     def routes_filter
-      options.symbolize_keys.slice(:controller, :grep)
+      if Rails::VERSION::MAJOR >= 6
+        options.symbolize_keys.slice(:controller, :grep)
+      else
+        options.key?("controller") ?
+          options.symbolize_keys.slice(:controller) :
+          options.fetch("grep", nil)
+      end
     end
 
     def formatter_opts
