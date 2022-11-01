@@ -6,6 +6,7 @@ require_relative "./request_spec_formatter"
 module Routes2spec
   # ref. https://github.com/rails/rails/blob/7-0-stable/railties/lib/rails/commands/routes/routes_command.rb
   class Routes2specCommand < Rails::Command::Base
+    class_option :binstubs, desc: "TODO"
     class_option :controller, aliases: "-c", desc: "Filter by a specific controller, e.g. PostsController or Admin::PostsController."
     class_option :grep, aliases: "-g", desc: "Grep routes by a specific pattern."
     # class_option :expanded, type: :boolean, aliases: "-E", desc: "Print routes expanded vertically with parts explained."
@@ -14,6 +15,11 @@ module Routes2spec
     class_option :force_overwrite, desc: "TODO"
 
     def perform(*)
+      if options.key?("binstubs")
+        make_binstubs
+        exit 0
+      end
+
       require_application_and_environment!
       require "action_dispatch/routing/inspector"
 
@@ -52,6 +58,16 @@ module Routes2spec
     end
 
     private
+
+    def make_binstubs
+      require "fileutils"
+      FileUtils.mkdir_p("bin")
+      outfile = File.expand_path("bin/routes2spec")
+      file_path = File.expand_path(File.join(File.dirname(__FILE__), "binstubs/routes2spec"))
+      content = File.read(file_path)
+      File.write(outfile, content, mode: "w")
+      Routes2spec.log "Generated: bin/routes2spec"
+    end
 
     def inspector
       ActionDispatch::Routing::RoutesInspector.new(Rails.application.routes.routes)
