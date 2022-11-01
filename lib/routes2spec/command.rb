@@ -54,6 +54,8 @@ module Routes2spec
         end
       end
     end
+    # https://github.com/rails/rails/blob/v7.0.4/railties/lib/rails/command/base.rb#L144
+    alias_method "routes2spec", "perform"
 
     private
 
