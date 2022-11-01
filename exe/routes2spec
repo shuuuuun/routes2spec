@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
 require "routes2spec"
-# require "routes2spec/routes2spec_command"
 
-# command = ARGV.shift
-# Rails::Command.invoke command, ARGV
-Routes2spec::Routes2specCommand.perform("routes2spec", ARGV, {})
+Routes2spec::Command.perform("routes2spec", ARGV, {})

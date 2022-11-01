@@ -5,7 +5,7 @@ require_relative "./request_spec_formatter"
 
 module Routes2spec
   # ref. https://github.com/rails/rails/blob/7-0-stable/railties/lib/rails/commands/routes/routes_command.rb
-  class Routes2specCommand < Rails::Command::Base
+  class Command < Rails::Command::Base
     class_option :binstubs, desc: "TODO"
     class_option :controller, aliases: "-c", desc: "Filter by a specific controller, e.g. PostsController or Admin::PostsController."
     class_option :grep, aliases: "-g", desc: "Grep routes by a specific pattern."
@@ -22,7 +22,6 @@ module Routes2spec
       require_application_and_environment!
       require "action_dispatch/routing/inspector"
 
-      # say inspector.format(formatter, routes_filter)
       results = inspector.format(formatter, routes_filter)
       results.each do |result|
         outfile = Rails.root.join("spec/requests", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
