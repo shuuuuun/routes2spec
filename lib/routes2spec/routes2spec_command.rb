@@ -9,13 +9,12 @@ module Routes2spec
     class_option :binstubs, desc: "TODO"
     class_option :controller, aliases: "-c", desc: "Filter by a specific controller, e.g. PostsController or Admin::PostsController."
     class_option :grep, aliases: "-g", desc: "Grep routes by a specific pattern."
-    # class_option :expanded, type: :boolean, aliases: "-E", desc: "Print routes expanded vertically with parts explained."
     class_option :symbol_status, desc: "TODO"
     class_option :overwrite, desc: "TODO"
     class_option :force_overwrite, desc: "TODO"
 
     def perform(*)
-      if options.key?("binstubs")
+      if options.binstubs?
         make_binstubs
         exit 0
       end
@@ -35,14 +34,14 @@ module Routes2spec
           next
         end
 
-        if options.key?("force_overwrite")
+        if options.force_overwrite?
           Routes2spec.log "Overwriting: #{outfile}"
           File.write(outfile, result[:content], mode: "w")
           next
         end
 
         Routes2spec.log "Already exists: #{outfile}"
-        if options.key?("overwrite")
+        if options.overwrite?
           print "Overwrite? (y/n/q) "
           res = $stdin.gets.chomp
           case res.downcase
@@ -79,16 +78,16 @@ module Routes2spec
 
     def routes_filter
       if Rails::VERSION::MAJOR >= 6
-        options.symbolize_keys.slice(:controller, :grep)
+        options.slice(:controller, :grep)
       else
-        options.key?("controller") ?
-          options.symbolize_keys.slice(:controller) :
-          options.fetch("grep", nil)
+        options.controller? ?
+          options.slice(:controller) :
+          options.fetch(:grep, nil)
       end
     end
 
     def formatter_opts
-      options.symbolize_keys.slice(:symbol_status)
+      options.slice(:symbol_status)
     end
   end
 end
