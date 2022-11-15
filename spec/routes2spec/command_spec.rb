@@ -1,24 +1,23 @@
 # frozen_string_literal: true
 
 require "isolation/abstract_unit"
-# require "rails/railties/test/isolation/abstract_unit"
 
 RSpec.describe Routes2spec::Command do
   include TestHelpers::Paths
-  # include TestHelpers::Rack
   include TestHelpers::Generation
-  # include TestHelpers::Reload
-  # include ActiveSupport::Testing::Stream
-  # include ActiveSupport::Testing::MethodCallAssertions
 
-  before do
-    build_app
-    # `cd #{app_path}; bundle exec routes2spec --binstubs`
-    run_command(%w[bundle exec routes2spec --binstubs])
-  end
+  before { build_app }
   after { teardown_app }
 
-  describe "" do
+  describe "binstubs" do
+    subject { run_command(%w[bundle exec routes2spec --binstubs]) }
+    before { subject }
+    it { expect(File.exist?(app_path("bin/routes2spec"))).to be true }
+    it { expect(File.executable?(app_path("bin/routes2spec"))).to be true }
+    it { expect(File.read(app_path("bin/routes2spec"))).to eq(File.read("lib/routes2spec/binstubs/routes2spec")) }
+  end
+
+  describe "regular usage" do
     before do
       app_file "config/routes.rb", <<-RUBY
         Rails.application.routes.draw do
@@ -26,6 +25,8 @@ RSpec.describe Routes2spec::Command do
           resource :user_permission
         end
       RUBY
+
+      run_command(%w[bundle exec routes2spec --binstubs])
     end
 
     it do
