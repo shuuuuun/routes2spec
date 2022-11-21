@@ -79,16 +79,16 @@ module Routes2spec
 
     def routes_filter
       if Rails::VERSION::MAJOR >= 6
-        options.slice(:controller, :grep)
+        options.symbolize_keys.slice(:controller, :grep)
       else
         options.controller? ?
-          options.slice(:controller) :
+          options.symbolize_keys.slice(:controller) :
           options.fetch(:grep, nil)
       end
     end
 
     def formatter_opts
-      options.slice(:symbol_status)
+      options.symbolize_keys.slice(:symbol_status)
     end
   end
 end
