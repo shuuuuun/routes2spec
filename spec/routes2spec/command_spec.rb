@@ -150,12 +150,7 @@ RSpec.describe Routes2spec::Command do
     end
 
     describe "controller option" do
-      # subject { run_routes_command(options) }
-      # let(:options) { nil }
-      # before { subject }
-
       it do
-        # binding.irb
         run_routes_command(["-c", "PostController"])
         expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
         expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be false
@@ -170,13 +165,13 @@ RSpec.describe Routes2spec::Command do
 
     describe "grep option" do
       it do
-        run_routes_command(["-g", "Post"])
+        run_routes_command(["-g", "posts"])
         expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
         expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be false
       end
 
       it do
-        run_routes_command(["-g", "UserPermission"])
+        run_routes_command(["-g", "user_permissions"])
         expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be false
         expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
       end
