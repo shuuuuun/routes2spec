@@ -148,6 +148,130 @@ RSpec.describe Routes2spec::Command do
         end
       OUTPUT
     end
+
+    describe "controller option" do
+      # subject { run_routes_command(options) }
+      # let(:options) { nil }
+      # before { subject }
+
+      it do
+        # binding.irb
+        run_routes_command(["-c", "PostController"])
+        expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
+        expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be false
+      end
+
+      it do
+        run_routes_command(["-c", "UserPermissionController"])
+        expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be false
+        expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+      end
+    end
+
+    describe "grep option" do
+      it do
+        run_routes_command(["-g", "Post"])
+        expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
+        expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be false
+      end
+
+      it do
+        run_routes_command(["-g", "UserPermission"])
+        expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be false
+        expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+      end
+    end
+
+    describe "symbol_status option" do
+      before do
+        run_routes_command("--symbol-status")
+      end
+      it do
+        # TODO: symbolになってるかどうか
+      end
+    end
+
+    describe "overwrite option" do
+      before do
+        # 事前にファイルを作る
+        FileUtils.mkdir_p(app_path("spec/requests"))
+        FileUtils.touch(app_path("spec/requests/posts_spec.rb"))
+      end
+
+      context "yes" do
+        before do
+          allow($stdin).to receive(:gets).and_return("y\n")
+          # $stdin = StringIO.new("y\n")
+          binding.irb
+          run_routes_command("--overwrite")
+          # run_routes_command("--overwrite", stderr: true)
+          # y 入力
+          # $stdin.gets.chomp
+          # $stdin = STDIN
+        end
+        it do
+          # 事前にあったファイルが上書きされてること
+          expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
+          expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to be_empty
+        end
+        it do
+          # 事前になかったファイルは普通に作成されてること
+          expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+        end
+      end
+
+      context "no" do
+        before do
+          allow($stdin).to receive(:gets).and_return("n\n")
+          run_routes_command("--overwrite")
+          # n 入力
+        end
+        it do
+          # 事前にあったファイルが上書きされてないこと
+          expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
+          expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to be_empty
+        end
+        it do
+          # 事前になかったファイルは普通に作成されてること
+          expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+        end
+      end
+
+      context "quit" do
+        before do
+          allow($stdin).to receive(:gets).and_return("q\n")
+          run_routes_command("--overwrite")
+        end
+        it do
+          expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
+          expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to be_empty
+        end
+        it do
+          expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+        end
+      end
+    end
+
+    describe "force_overwrite option" do
+      before do
+        # 事前にファイルを作る
+        FileUtils.mkdir_p(app_path("spec/requests"))
+        FileUtils.touch(app_path("spec/requests/posts_spec.rb"))
+        # File.write(app_path("spec/requests/posts_spec.rb"), "hoge")
+
+        run_routes_command("--force-overwrite")
+      end
+      it do
+        # 事前にあったファイルが上書きされてること
+        expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
+        # expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to eq("hoge")
+        expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to be_empty
+      end
+      it do
+        # 事前になかったファイルは普通に作成されてること
+        expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+      end
+    end
   end
 
   private
@@ -156,11 +280,8 @@ RSpec.describe Routes2spec::Command do
     run_command "bin/routes2spec", args
   end
 
-  # def run_command(cmd, args = [])
   def run_command(*args, allow_failure: false, stderr: false)
     args = args.flatten
-    # puts "args: #{args}"
-    # command = "#{cmd} #{Shellwords.join args}#{' 2>&1' unless stderr}"
     command = "#{Shellwords.join args}#{' 2>&1' unless stderr}"
     output = `cd #{app_path}; #{command}`
 
