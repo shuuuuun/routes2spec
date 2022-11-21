@@ -76,7 +76,7 @@ module Routes2spec
     def header(routes)
     end
 
-    def no_routes(routes)
+    def no_routes(*)
     end
   end
 end
