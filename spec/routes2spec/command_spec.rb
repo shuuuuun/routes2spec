@@ -200,14 +200,7 @@ RSpec.describe Routes2spec::Command do
 
       context "yes" do
         before do
-          allow($stdin).to receive(:gets).and_return("y\n")
-          # $stdin = StringIO.new("y\n")
-          binding.irb
-          run_routes_command("--overwrite")
-          # run_routes_command("--overwrite", stderr: true)
-          # y 入力
-          # $stdin.gets.chomp
-          # $stdin = STDIN
+          run_routes_command("--overwrite", stdin_data: "y\n")
         end
         it do
           # 事前にあったファイルが上書きされてること
@@ -217,37 +210,36 @@ RSpec.describe Routes2spec::Command do
         it do
           # 事前になかったファイルは普通に作成されてること
           expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+          expect(File.read(app_path("spec/requests/user_permissions_spec.rb"))).not_to be_empty
         end
       end
 
       context "no" do
         before do
-          allow($stdin).to receive(:gets).and_return("n\n")
-          run_routes_command("--overwrite")
-          # n 入力
+          run_routes_command("--overwrite", stdin_data: "n\n")
         end
         it do
           # 事前にあったファイルが上書きされてないこと
           expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
-          expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to be_empty
+          expect(File.read(app_path("spec/requests/posts_spec.rb"))).to be_empty
         end
         it do
           # 事前になかったファイルは普通に作成されてること
           expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+          expect(File.read(app_path("spec/requests/user_permissions_spec.rb"))).not_to be_empty
         end
       end
 
       context "quit" do
         before do
-          allow($stdin).to receive(:gets).and_return("q\n")
-          run_routes_command("--overwrite")
+          run_routes_command("--overwrite", stdin_data: "q\n")
         end
         it do
           expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
-          expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to be_empty
+          expect(File.read(app_path("spec/requests/posts_spec.rb"))).to be_empty
         end
         it do
-          expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+          expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be false
         end
       end
     end
@@ -257,35 +249,36 @@ RSpec.describe Routes2spec::Command do
         # 事前にファイルを作る
         FileUtils.mkdir_p(app_path("spec/requests"))
         FileUtils.touch(app_path("spec/requests/posts_spec.rb"))
-        # File.write(app_path("spec/requests/posts_spec.rb"), "hoge")
 
         run_routes_command("--force-overwrite")
       end
       it do
         # 事前にあったファイルが上書きされてること
         expect(File.exist?(app_path("spec/requests/posts_spec.rb"))).to be true
-        # expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to eq("hoge")
         expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to be_empty
       end
       it do
         # 事前になかったファイルは普通に作成されてること
         expect(File.exist?(app_path("spec/requests/user_permissions_spec.rb"))).to be true
+        expect(File.read(app_path("spec/requests/user_permissions_spec.rb"))).not_to be_empty
       end
     end
   end
 
   private
 
-  def run_routes_command(args = [])
-    run_command "bin/routes2spec", args
+  def run_routes_command(*args, **kwargs)
+    run_command "bin/routes2spec", *args, **kwargs
   end
 
-  def run_command(*args, allow_failure: false, stderr: false)
+  def run_command(*args, stdin_data: nil, allow_failure: false, stderr: false)
+    require "open3"
+
     args = args.flatten
     command = "#{Shellwords.join args}#{' 2>&1' unless stderr}"
-    output = `cd #{app_path}; #{command}`
+    output, err, status = Open3.capture3("cd #{app_path}; #{command}", stdin_data: stdin_data)
 
-    raise "command failed (#{$?.exitstatus}): #{command}\n#{output}" unless allow_failure || $?.success?
+    raise "command failed (#{status.exitstatus}): #{command}\n#{output}\n#{err}" unless allow_failure || status.success?
 
     output
   end
