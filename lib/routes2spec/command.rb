@@ -66,6 +66,7 @@ module Routes2spec
       file_path = File.expand_path(File.join(File.dirname(__FILE__), "binstubs/routes2spec"))
       content = File.read(file_path)
       File.write(outfile, content, mode: "w")
+      FileUtils.chmod("+x", outfile)
       Routes2spec.log "Generated: bin/routes2spec"
     end
 
