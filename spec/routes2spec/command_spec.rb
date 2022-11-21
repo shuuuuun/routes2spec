@@ -186,9 +186,12 @@ RSpec.describe Routes2spec::Command do
       before do
         run_routes_command("--symbol-status")
       end
-      it do
-        # TODO: symbolになってるかどうか
-      end
+      it { expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to include("have_http_status(200)") }
+      it { expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to include("have_http_status(201)") }
+      it { expect(File.read(app_path("spec/requests/posts_spec.rb"))).not_to include("have_http_status(204)") }
+      it { expect(File.read(app_path("spec/requests/posts_spec.rb"))).to include("have_http_status(:ok)") }
+      it { expect(File.read(app_path("spec/requests/posts_spec.rb"))).to include("have_http_status(:created)") }
+      it { expect(File.read(app_path("spec/requests/posts_spec.rb"))).to include("have_http_status(:no_content)") }
     end
 
     describe "overwrite option" do
