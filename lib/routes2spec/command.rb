@@ -6,12 +6,12 @@ require_relative "./request_spec_formatter"
 module Routes2spec
   # ref. https://github.com/rails/rails/blob/7-0-stable/railties/lib/rails/commands/routes/routes_command.rb
   class Command < Rails::Command::Base
-    class_option :binstubs, desc: "TODO"
+    class_option :binstubs, banner: "", desc: "Generate binstubs."
     class_option :controller, aliases: "-c", desc: "Filter by a specific controller, e.g. PostsController or Admin::PostsController."
     class_option :grep, aliases: "-g", desc: "Grep routes by a specific pattern."
-    class_option :symbol_status, desc: "TODO"
-    class_option :overwrite, desc: "TODO"
-    class_option :force_overwrite, desc: "TODO"
+    class_option :symbol_status, banner: "", desc: "Use symbols for http status."
+    class_option :overwrite, banner: "", desc: "Overwrite files even if they exist."
+    class_option :force_overwrite, banner: "", desc: "Force overwrite files even if they exist."
 
     def perform(*)
       if options.binstubs?
