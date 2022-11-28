@@ -6,7 +6,11 @@ require_relative "./request_spec_formatter"
 module Routes2spec
   # ref. https://github.com/rails/rails/blob/7-0-stable/railties/lib/rails/commands/routes/routes_command.rb
   class Command < Rails::Command::Base
+    class_option :help, aliases: "-h", banner: "", desc: "Show this message."
+    class_option :version, aliases: "-V", banner: "", desc: "Show version."
+
     class_option :binstubs, banner: "", desc: "Generate binstubs."
+
     class_option :controller, aliases: "-c", desc: "Filter by a specific controller, e.g. PostsController or Admin::PostsController."
     class_option :grep, aliases: "-g", desc: "Grep routes by a specific pattern."
     class_option :symbol_status, banner: "", desc: "Use symbols for http status."
@@ -20,6 +24,11 @@ module Routes2spec
     end
 
     def perform(*)
+      if options.version?
+        $stdout.puts "Routes2spec: #{Routes2spec::VERSION}"
+        exit 0
+      end
+
       if options.binstubs?
         make_binstubs
         exit 0
