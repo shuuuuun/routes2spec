@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require "shellwords"
+
+root_path = File.expand_path("../", __dir__)
+
+exec "bundle exec ruby #{File.join(root_path, "exe/routes2spec")} #{Shellwords.join(ARGV)}"
