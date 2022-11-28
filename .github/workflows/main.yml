@@ -11,24 +11,28 @@ on:
       - reopened
 
 jobs:
-  build:
+  rspec:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+    name: test on Ruby ${{ matrix.ruby }}
     strategy:
       matrix:
         ruby:
-          - '3.1.0'
-          - '3.0.0'
-          - '2.7.0'
+          - 3.1
+          - 3.0
+          - 2.7
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Install bundler
+        run: gem install bundler
+      - name: Setup
+        run: bin/setup
+      - name: RSpec
+        run: bundle exec rspec
   rubocop:
     runs-on: ubuntu-latest
     steps:
