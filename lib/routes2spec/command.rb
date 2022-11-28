@@ -25,7 +25,7 @@ module Routes2spec
 
     def perform(*)
       if options.version?
-        $stdout.puts "Routes2spec: #{Routes2spec::VERSION}"
+        say "Routes2spec: #{Routes2spec::VERSION}"
         exit 0
       end
 
@@ -56,15 +56,8 @@ module Routes2spec
 
         Routes2spec.log "Already exists: #{outfile}"
         if options.overwrite?
-          print "Overwrite? (y/n/q) "
-          res = $stdin.gets.chomp
-          case res.downcase
-          when "y"
+          if file_collision(outfile)
             File.write(outfile, result[:content], mode: "w")
-          when "q"
-            exit 0
-          else
-            next
           end
         end
       end
