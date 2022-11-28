@@ -197,12 +197,12 @@ RSpec.describe Routes2spec::Command do
 
     describe "overwrite option" do
       before do
-        # 事前にファイルを作る
+        # create a file before example
         FileUtils.mkdir_p(app_path("spec/requests"))
         FileUtils.touch(app_path("spec/requests/posts_spec.rb"))
       end
 
-      context "yes" do
+      context "with yes" do
         before do
           run_routes_command("--overwrite", stdin_data: "y\n")
         end
@@ -218,7 +218,7 @@ RSpec.describe Routes2spec::Command do
         end
       end
 
-      context "no" do
+      context "with no" do
         before do
           run_routes_command("--overwrite", stdin_data: "n\n")
         end
@@ -234,7 +234,7 @@ RSpec.describe Routes2spec::Command do
         end
       end
 
-      context "quit" do
+      context "with quit" do
         before do
           run_routes_command("--overwrite", stdin_data: "q\n")
         end
@@ -250,7 +250,7 @@ RSpec.describe Routes2spec::Command do
 
     describe "force_overwrite option" do
       before do
-        # 事前にファイルを作る
+        # create a file before example
         FileUtils.mkdir_p(app_path("spec/requests"))
         FileUtils.touch(app_path("spec/requests/posts_spec.rb"))
 
@@ -279,7 +279,7 @@ RSpec.describe Routes2spec::Command do
     require "open3"
 
     args = args.flatten
-    command = "#{Shellwords.join args}#{' 2>&1' unless stderr}"
+    command = "#{Shellwords.join args}#{" 2>&1" unless stderr}"
     output, err, status = Open3.capture3("cd #{app_path}; #{command}", stdin_data: stdin_data)
 
     raise "command failed (#{status.exitstatus}): #{command}\n#{output}\n#{err}" unless allow_failure || status.success?

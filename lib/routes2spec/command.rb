@@ -4,14 +4,15 @@ require "rails/command"
 require_relative "./request_spec_formatter"
 
 module Routes2spec
-  # ref. https://github.com/rails/rails/blob/7-0-stable/railties/lib/rails/commands/routes/routes_command.rb
+  # Routes2spec::Command class
   class Command < Rails::Command::Base
     class_option :help, aliases: "-h", banner: "", desc: "Show this message."
     class_option :version, aliases: "-V", banner: "", desc: "Show version."
 
     class_option :binstubs, banner: "", desc: "Generate binstubs."
 
-    class_option :controller, aliases: "-c", desc: "Filter by a specific controller, e.g. PostsController or Admin::PostsController."
+    class_option :controller, aliases: "-c",
+                              desc: "Filter by a specific controller, e.g. PostsController or Admin::PostsController."
     class_option :grep, aliases: "-g", desc: "Grep routes by a specific pattern."
     class_option :symbol_status, banner: "", desc: "Use symbols for http status."
     class_option :overwrite, banner: "", desc: "Overwrite files even if they exist."

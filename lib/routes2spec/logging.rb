@@ -4,7 +4,7 @@ module Routes2spec
   # @private
   module Logging
     def debug?
-      ENV["ROUTES2SPEC_DEBUG"]
+      ENV.fetch("ROUTES2SPEC_DEBUG", nil)
     end
 
     def log_debug(message)

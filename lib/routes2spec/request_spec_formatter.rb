@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Routes2spec
+  # Routes2spec::RequestSpecFormatter class
   class RequestSpecFormatter
     STATUS = {
       get: 200,
@@ -60,7 +61,7 @@ module Routes2spec
           r.merge(
             path: path,
             path_name: path_name,
-            status: status,
+            status: status
           )
         end.compact
         template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/request_spec.rb.erb"))

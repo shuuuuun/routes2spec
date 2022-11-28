@@ -11,6 +11,8 @@ AllCops:
   ExtraDetails: true
   Exclude:
     - 'spec/dummy/**/*'
+    - 'spec/tmp/**/*'
+    - 'spec/isolation/abstract_unit.rb'
     - 'vendor/bundle/**/*'
 
 Style/ClassAndModuleChildren:
