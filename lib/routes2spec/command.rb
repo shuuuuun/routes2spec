@@ -13,6 +13,12 @@ module Routes2spec
     class_option :overwrite, banner: "", desc: "Overwrite files even if they exist."
     class_option :force_overwrite, banner: "", desc: "Force overwrite files even if they exist."
 
+    class << self
+      def executable
+        "routes2spec"
+      end
+    end
+
     def perform(*)
       if options.binstubs?
         make_binstubs
