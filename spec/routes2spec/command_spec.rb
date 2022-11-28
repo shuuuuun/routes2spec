@@ -9,6 +9,12 @@ RSpec.describe Routes2spec::Command do
   before { build_app }
   after { teardown_app }
 
+  describe "version" do
+    subject { run_command(%w[bundle exec routes2spec --version]) }
+
+    it { is_expected.to include Routes2spec::VERSION }
+  end
+
   describe "binstubs" do
     subject { run_command(%w[bundle exec routes2spec --binstubs]) }
     before { subject }
