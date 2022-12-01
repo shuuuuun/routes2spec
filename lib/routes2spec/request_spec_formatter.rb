@@ -64,6 +64,10 @@ module Routes2spec
             status: status
           )
         end.compact
+        if routes.empty?
+          Routes2spec.log_debug "empty routes!"
+          next
+        end
         template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/request_spec.rb.erb"))
         content = ERB.new(File.read(template_path)).result(binding)
         {
