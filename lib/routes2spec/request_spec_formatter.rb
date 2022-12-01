@@ -34,8 +34,8 @@ module Routes2spec
     def section(routes)
       grouped = routes.group_by { |r| r[:reqs].split("#").first }
       Routes2spec.log_debug grouped
-      @results << grouped.map do |controller, routes|
-        next unless routes.first[:reqs].include?("#")
+      @results << grouped.map do |controller, grouped_routes|
+        next unless grouped_routes.first[:reqs].include?("#")
 
         namespaces = controller.split("/")
         controller_name = namespaces.pop
@@ -43,11 +43,11 @@ module Routes2spec
           Routes2spec.log_debug "No controller name! #{namespaces}"
           next
         end
-        routes = routes.map do |r|
+        routes = grouped_routes.map do |r|
           verb = r[:verb]&.downcase # GET|POST
           path = r[:path].gsub("(.:format)", "")
           path_name = r[:name] || ""
-          path_name = routes.find{ _1[:path] == r[:path] && !_1[:name].empty? }&.fetch(:name) || "" if path_name.empty?
+          path_name = grouped_routes.find{ _1[:path] == r[:path] && !_1[:name].empty? }&.fetch(:name) || "" if path_name.empty?
           Routes2spec.log_debug "verb: #{verb}, path: #{path}, path_name: #{path_name}"
           if path_name.empty?
             Routes2spec.log_debug "No path name!"
