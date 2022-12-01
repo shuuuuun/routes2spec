@@ -33,14 +33,18 @@ module Routes2spec
 
     def section(routes)
       grouped = routes.group_by { |r| r[:reqs].split("#").first }
-      Routes2spec.log_debug grouped
+      Routes2spec.log_debug "grouped: #{grouped}"
       @results << grouped.map do |controller, grouped_routes|
-        next unless grouped_routes.first[:reqs].include?("#")
+        # TODO: support redirect. ex: {"redirect(301, https://example.com)"=>[{:name=>"example", :verb=>"GET", :path=>"/example(.:format)", :reqs=>"redirect(301, https://example.com)"}]}
+        unless grouped_routes.first[:reqs].include?("#")
+          Routes2spec.log "Skip. Unsupported reqs! `#{grouped_routes.first[:reqs]}`"
+          next
+        end
 
         namespaces = controller.split("/")
         controller_name = namespaces.pop
         unless controller_name
-          Routes2spec.log_debug "No controller name! #{namespaces}"
+          Routes2spec.log "Skip. No controller name! namespaces: #{namespaces}"
           next
         end
         routes = grouped_routes.map do |r|
@@ -50,11 +54,11 @@ module Routes2spec
           path_name = grouped_routes.find{ _1[:path] == r[:path] && !_1[:name].empty? }&.fetch(:name) || "" if path_name.empty?
           Routes2spec.log_debug "verb: #{verb}, path: #{path}, path_name: #{path_name}"
           if path_name.empty?
-            Routes2spec.log_debug "No path name!"
+            Routes2spec.log "Skip. No path name! `#{verb&.upcase} #{path}`"
             next
           end
           unless %w[get post patch put delete].include?(verb)
-            Routes2spec.log_debug "Unsupported verb! #{verb}"
+            Routes2spec.log "Skip. Unsupported verb! `#{verb&.upcase} #{path}`"
             next
           end
           status = @opts[:symbol_status] ? SYMBOL_STATUS[verb.to_sym] : STATUS[verb.to_sym]
@@ -65,7 +69,7 @@ module Routes2spec
           )
         end.compact
         if routes.empty?
-          Routes2spec.log_debug "empty routes!"
+          Routes2spec.log "Skip. Empty routes! `#{controller}`"
           next
         end
         template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/request_spec.rb.erb"))
