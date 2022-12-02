@@ -4,7 +4,7 @@ RSpec.describe "<%= controller_name.camelize %>", type: :request do
 <% routes.each do |route| %>
   describe "<%= route[:verb].upcase %> <%= route[:path] %>" do
     it "works!" do
-      <%= route[:verb].downcase %> <%= route[:path_name] %>_path
+      <%= route[:verb].downcase %> <%= route[:path_name] %>_path<%= route[:params].empty? ? "" : "(#{route[:params]})" %>
       expect(response).to have_http_status(<%= route[:status] %>)
     end
   end

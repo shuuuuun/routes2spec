@@ -51,6 +51,8 @@ module Routes2spec
         routes = grouped_routes.map do |r|
           verb = r[:verb]&.downcase # GET|POST
           path = r[:path].gsub("(.:format)", "")
+          param_names = path.scan %r{(?<=/:).+?(?=/|\z)}
+          params = param_names.map{|name| [name.to_sym, name] }.to_h
           path_name = r[:name] || ""
           path_name = grouped_routes.find{ _1[:path] == r[:path] && !_1[:name].empty? }&.fetch(:name) || "" if path_name.empty?
           Routes2spec.log_debug "verb: #{verb}, path: #{path}, path_name: #{path_name}"
@@ -66,6 +68,7 @@ module Routes2spec
           r.merge(
             path: path,
             path_name: path_name,
+            params: params,
             status: status
           )
         end.compact
