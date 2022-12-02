@@ -32,14 +32,15 @@ module Routes2spec
     end
 
     def section(routes)
+      routes = routes.select do |r|
+        is_valid = r[:reqs].include?("#") && !r[:reqs].start_with?("#<")
+        Routes2spec.log "Skip. Unsupported reqs! `#{r[:reqs]}`" unless is_valid
+        is_valid
+      end
       grouped = routes.group_by { |r| r[:reqs].split("#").first }
       Routes2spec.log_debug "grouped: #{grouped}"
       @results << grouped.map do |controller, grouped_routes|
         # TODO: support redirect. ex: {"redirect(301, https://example.com)"=>[{:name=>"example", :verb=>"GET", :path=>"/example(.:format)", :reqs=>"redirect(301, https://example.com)"}]}
-        unless grouped_routes.first[:reqs].include?("#")
-          Routes2spec.log "Skip. Unsupported reqs! `#{grouped_routes.first[:reqs]}`"
-          next
-        end
 
         namespaces = controller.split("/")
         controller_name = namespaces.pop
