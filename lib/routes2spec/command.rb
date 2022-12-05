@@ -41,33 +41,37 @@ module Routes2spec
       results = inspector.format(formatter, routes_filter)
       results.each do |result|
         relative_path = File.join("spec/requests", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
-        outfile = Rails.root.join(relative_path)
-        FileUtils.mkdir_p(File.dirname(outfile))
-
-        unless File.exist?(outfile)
-          Routes2spec.log "Generating: #{relative_path}"
-          File.write(outfile, result[:content], mode: "w")
-          next
-        end
-
-        if options.force_overwrite?
-          Routes2spec.log "Overwriting: #{relative_path}"
-          File.write(outfile, result[:content], mode: "w")
-          next
-        end
-
-        Routes2spec.log "Already exists: #{relative_path}"
-
-        if options.overwrite? && file_collision(relative_path)
-          say "Overwriting..."
-          File.write(outfile, result[:content], mode: "w")
-        end
+        writing_file(relative_path, result[:content])
       end
     end
     # https://github.com/rails/rails/blob/v7.0.4/railties/lib/rails/command/base.rb#L144
     alias_method "routes2spec", "perform"
 
     private
+
+    def writing_file(relative_path, content)
+      outfile = Rails.root.join(relative_path)
+      FileUtils.mkdir_p(File.dirname(outfile))
+
+      unless File.exist?(outfile)
+        Routes2spec.log "Generating: #{relative_path}"
+        File.write(outfile, content, mode: "w")
+        return
+      end
+
+      if options.force_overwrite?
+        Routes2spec.log "Overwriting: #{relative_path}"
+        File.write(outfile, content, mode: "w")
+        return
+      end
+
+      Routes2spec.log "Already exists: #{relative_path}"
+
+      if options.overwrite? && file_collision(relative_path)
+        say "Overwriting..."
+        File.write(outfile, content, mode: "w")
+      end
+    end
 
     def make_binstubs
       require "fileutils"
