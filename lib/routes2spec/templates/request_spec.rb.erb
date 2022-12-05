@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "<%= controller_name.camelize %>", type: :request do
+RSpec.describe "<%= controller_name %>", type: :request do
 <% routes.each do |route| %>
   describe "<%= route[:verb].upcase %> <%= route[:path] %>" do
     it "works!" do

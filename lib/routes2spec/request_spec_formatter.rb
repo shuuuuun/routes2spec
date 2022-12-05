@@ -43,9 +43,11 @@ module Routes2spec
         # TODO: support redirect. ex: {"redirect(301, https://example.com)"=>[{:name=>"example", :verb=>"GET", :path=>"/example(.:format)", :reqs=>"redirect(301, https://example.com)"}]}
 
         namespaces = controller.split("/")
-        controller_name = namespaces.pop
-        unless controller_name
-          Routes2spec.log "Skip. No controller name! namespaces: #{namespaces}"
+        controller_name = namespaces.map(&:camelize).join("::")
+        group_name = namespaces.pop
+        Routes2spec.log_debug "namespaces: #{namespaces}, group_name: #{group_name}, controller_name: #{controller_name}"
+        unless group_name
+          Routes2spec.log "Skip. Invalid controller format! `#{controller}`"
           next
         end
         routes = grouped_routes.map do |r|
@@ -79,7 +81,7 @@ module Routes2spec
         template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/request_spec.rb.erb"))
         content = ERB.new(File.read(template_path)).result(binding)
         {
-          name: controller_name,
+          name: group_name,
           namespaces: namespaces,
           content: content,
         }
