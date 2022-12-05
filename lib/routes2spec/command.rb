@@ -42,6 +42,9 @@ module Routes2spec
       results.each do |result|
         relative_path = File.join("spec/requests", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
         writing_file(relative_path, result[:content])
+
+        relative_path = File.join("spec/routing", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
+        writing_file(relative_path, result[:routing_content])
       end
     end
     # https://github.com/rails/rails/blob/v7.0.4/railties/lib/rails/command/base.rb#L144

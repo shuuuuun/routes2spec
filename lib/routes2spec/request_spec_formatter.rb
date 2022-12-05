@@ -71,6 +71,7 @@ module Routes2spec
             path: path,
             path_name: path_name,
             params_str: params_str,
+            reqs: r[:reqs],
             status: status
           )
         end.compact
@@ -80,10 +81,13 @@ module Routes2spec
         end
         template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/request_spec.rb.erb"))
         content = ERB.new(File.read(template_path)).result(binding)
+        routing_template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/routing_spec.rb.erb"))
+        routing_content = ERB.new(File.read(routing_template_path)).result(binding)
         {
           name: group_name,
           namespaces: namespaces,
           content: content,
+          routing_content: routing_content,
         }
       end.compact
     end
