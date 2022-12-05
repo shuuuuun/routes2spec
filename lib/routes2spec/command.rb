@@ -81,7 +81,12 @@ module Routes2spec
     end
 
     def inspector
-      ActionDispatch::Routing::RoutesInspector.new(Rails.application.routes.routes)
+      ActionDispatch::Routing::RoutesInspector.new(routes)
+    end
+
+    def routes
+      # TODO: support engine routes.
+      Rails.application.routes.routes.reject{ _1.app.engine? }
     end
 
     def formatter
