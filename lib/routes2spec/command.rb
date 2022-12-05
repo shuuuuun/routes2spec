@@ -86,7 +86,7 @@ module Routes2spec
 
     def routes
       # TODO: support engine routes.
-      Rails.application.routes.routes.reject{ _1.app.engine? }
+      Rails.application.routes.routes.reject{ _1.app.engine? || _1.internal }
     end
 
     def formatter
