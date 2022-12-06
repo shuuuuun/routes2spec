@@ -17,6 +17,7 @@ module Routes2spec
     class_option :symbol_status, banner: "", desc: "Use symbols for http status."
     class_option :overwrite, banner: "", desc: "Overwrite files even if they exist."
     class_option :force_overwrite, banner: "", desc: "Force overwrite files even if they exist."
+    class_option :pending, banner: "", desc: "Mark examples as pending."
 
     class << self
       def executable
@@ -105,7 +106,7 @@ module Routes2spec
     end
 
     def formatter_opts
-      options.symbolize_keys.slice(:symbol_status)
+      options.symbolize_keys.slice(:symbol_status, :pending)
     end
   end
 end

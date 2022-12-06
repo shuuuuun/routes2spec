@@ -4,6 +4,7 @@ RSpec.describe "<%= controller_name %>", type: :request do
 <% routes.each do |route| %>
   describe "<%= route[:verb].upcase %> <%= route[:path] %>" do
     it "works!" do
+      <%= pending ? 'pending "now write some real specs"' : "" %>
       <%= route[:verb].downcase %> <%= route[:path_name] %>_path<%= route[:params_str].empty? ? "" : "(#{route[:params_str]})" %>
       expect(response).to have_http_status(<%= route[:status] %>)
     end

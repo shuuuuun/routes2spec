@@ -84,6 +84,7 @@ module Routes2spec
           Routes2spec.log "Skip. Empty routes! `#{controller}`"
           next
         end
+        pending = @opts[:pending] || false
         template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/request_spec.rb.erb"))
         content = ERB.new(File.read(template_path)).result(binding)
         routing_template_path = File.expand_path(File.join(File.dirname(__FILE__), "templates/routing_spec.rb.erb"))

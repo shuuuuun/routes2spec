@@ -4,6 +4,7 @@ RSpec.describe "<%= controller_name %>", type: :routing do
   describe "routing" do
     <% routes.each do |route| %>
     it "routes to <%= route[:endpoint] %>" do
+      <%= pending ? 'pending "now write some real specs"' : "" %>
       expect(<%= route[:verb].downcase %>: "<%= route[:path].delete(":") %>").to route_to("<%= route[:endpoint] %>"<%= route[:params_str].empty? ? "" : ", #{route[:params_str]}" %>)
     end
     <% end %>
