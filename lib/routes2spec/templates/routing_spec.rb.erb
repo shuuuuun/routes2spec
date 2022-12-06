@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe "<%= controller_name %>", type: :routing do
   describe "routing" do
     <% routes.each do |route| %>
-    it "routes to <%= route[:reqs] %>" do
-      expect(<%= route[:verb].downcase %>: "<%= route[:path].delete(":") %>").to route_to("<%= route[:reqs] %>"<%= route[:params_str].empty? ? "" : ", #{route[:params_str]}" %>)
+    it "routes to <%= route[:endpoint] %>" do
+      expect(<%= route[:verb].downcase %>: "<%= route[:path].delete(":") %>").to route_to("<%= route[:endpoint] %>"<%= route[:params_str].empty? ? "" : ", #{route[:params_str]}" %>)
     end
     <% end %>
   end

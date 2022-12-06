@@ -66,12 +66,17 @@ module Routes2spec
             Routes2spec.log "Skip. Unsupported verb! `#{verb&.upcase} #{path}`"
             next
           end
+          endpoint, constraints = r[:reqs].split(" ")
+          Routes2spec.log_debug "endpoint: #{endpoint}, constraints: #{constraints}"
+          # TODO: insert constraints to routing spec
           status = @opts[:symbol_status] ? SYMBOL_STATUS[verb.to_sym] : STATUS[verb.to_sym]
           r.merge(
             path: path,
             path_name: path_name,
             params_str: params_str,
             reqs: r[:reqs],
+            endpoint: endpoint,
+            constraints: constraints || "",
             status: status
           )
         end.compact
