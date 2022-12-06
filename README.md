@@ -1,28 +1,49 @@
 # Routes2spec
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/routes2spec`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Generate Request specs and Routing specs of RSpec, from your Rails routes config.
+It is useful as a test scaffolding.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'routes2spec'
+gem "routes2spec", group: :test
 ```
 
 And then execute:
 
     $ bundle install
 
-Or install it yourself as:
-
-    $ gem install routes2spec
-
 ## Usage
 
-TODO: Write usage instructions here
+This gem depends on the Rails application, so it generates binstubs first.
+```sh
+$ bundle exec routes2spec --binstubs
+# => `bin/routes2spec` will be generated.
+```
+
+Then, simply execute the following command to generate the spec files.
+```sh
+$ bin/routes2spec
+```
+
+See help for other options.
+```sh
+$ bin/routes2spec --help
+Usage:
+  routes2spec [options]
+
+Options:
+  -h, [--help]                   # Show this message.
+  -V, [--version]                # Show version.
+      [--binstubs]               # Generate binstubs.
+  -c, [--controller=CONTROLLER]  # Filter by a specific controller, e.g. PostsController or Admin::PostsController.
+  -g, [--grep=GREP]              # Grep routes by a specific pattern.
+      [--symbol-status]          # Use symbols for http status.
+      [--overwrite]              # Overwrite files even if they exist.
+      [--force-overwrite]        # Force overwrite files even if they exist.
+```
 
 ## Development
 
