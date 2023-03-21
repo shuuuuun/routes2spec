@@ -1,0 +1,7 @@
+# Routes2spec module
+module Routes2spec
+  class Error < StandardError
+  end
+
+  include Routes2spec::Logging
+end

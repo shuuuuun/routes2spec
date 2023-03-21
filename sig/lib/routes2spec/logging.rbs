@@ -1,0 +1,12 @@
+module Routes2spec
+  # @private
+  module Logging
+    def debug?: () -> untyped
+
+    def log_debug: (untyped message) -> (untyped | nil)
+
+    def log: (untyped message) -> untyped
+
+    def warn_deprecated: (untyped message) -> untyped
+  end
+end
