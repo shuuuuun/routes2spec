@@ -90,6 +90,10 @@ gems:
   version: '0'
   source:
     type: stdlib
+- name: date
+  version: '0'
+  source:
+    type: stdlib
 - name: fileutils
   version: '0'
   source:
@@ -178,10 +182,6 @@ gems:
     revision: 82e5c50fd20bdfb467b5890017a68ce6f4ee5e2b
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
-- name: routes2spec
-  version: 0.1.1
-  source:
-    type: rubygems
 - name: securerandom
   version: '0'
   source:
@@ -195,10 +195,6 @@ gems:
   source:
     type: stdlib
 - name: cgi
-  version: '0'
-  source:
-    type: stdlib
-- name: date
   version: '0'
   source:
     type: stdlib
