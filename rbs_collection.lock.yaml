@@ -6,6 +6,10 @@ sources:
   repo_dir: gems
 path: ".gem_rbs_collection"
 gems:
+- name: erb
+  version: '0'
+  source:
+    type: stdlib
 - name: actionmailer
   version: '7.0'
   source:

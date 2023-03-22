@@ -17,3 +17,4 @@ gems:
     ignore: true
   - name: routes2spec
     ignore: true
+  - name: erb

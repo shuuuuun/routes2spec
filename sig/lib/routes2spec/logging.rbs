@@ -1,12 +1,12 @@
 module Routes2spec
   # @private
   module Logging
-    def debug?: () -> untyped
+    def debug?: () -> boolish
 
-    def log_debug: (untyped message) -> (untyped | nil)
+    def log_debug: (String message) -> ::NilClass
 
-    def log: (untyped message) -> untyped
+    def log: (String message) -> ::NilClass
 
-    def warn_deprecated: (untyped message) -> untyped
+    def warn_deprecated: (String message) -> ::NilClass
   end
 end

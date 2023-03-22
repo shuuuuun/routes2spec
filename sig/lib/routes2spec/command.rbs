@@ -10,9 +10,9 @@ module Routes2spec
 
     private
 
-    def writing_file: (untyped relative_path, untyped content) -> (nil | untyped)
+    def writing_file: (String relative_path, String content) -> void
 
-    def make_binstubs: () -> untyped
+    def make_binstubs: () -> void
 
     def inspector: () -> untyped
 
