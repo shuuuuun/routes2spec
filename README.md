@@ -1,5 +1,8 @@
 # Routes2spec
 
+[![Gem Version](https://badge.fury.io/rb/routes2spec.svg)](https://badge.fury.io/rb/routes2spec)
+[![Ruby](https://github.com/shuuuuun/routes2spec/actions/workflows/main.yml/badge.svg)](https://github.com/shuuuuun/routes2spec/actions/workflows/main.yml)
+
 Generate Request specs and Routing specs of RSpec, from your Rails routes config.
 It is useful as a test scaffolding.
 
