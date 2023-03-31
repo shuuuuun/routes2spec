@@ -18,6 +18,7 @@ module Routes2spec
     class_option :overwrite, banner: "", desc: "Overwrite files even if they exist."
     class_option :force_overwrite, banner: "", desc: "Force overwrite files even if they exist."
     class_option :pending, banner: "", desc: "Mark examples as pending."
+    class_option :routing, type: :boolean, defalut: false, desc: "Generate routing specs."
 
     class << self
       def executable
@@ -45,7 +46,7 @@ module Routes2spec
         writing_file(relative_path, result[:content])
 
         relative_path = File.join("spec/routing", *result[:namespaces], "#{result[:name].underscore}_spec.rb")
-        writing_file(relative_path, result[:routing_content])
+        writing_file(relative_path, result[:routing_content]) if options.routing?
       end
     end
     # https://github.com/rails/rails/blob/v7.0.4/railties/lib/rails/command/base.rb#L144
