@@ -1,0 +1,22 @@
+module Routes2spec
+  # Routes2spec::RequestSpecFormatter class
+  class RequestSpecFormatter
+    STATUS: ::Hash[Symbol, Integer]
+    SYMBOL_STATUS: ::Hash[Symbol, String]
+
+    @results: ::Array[untyped]
+    @opts: ::Hash[Symbol, untyped]
+
+    def initialize: (?::Hash[Symbol, untyped] opts) -> void
+
+    def result: () -> untyped
+
+    def section_title: (untyped title) -> nil
+
+    def section: (untyped routes) -> untyped
+
+    def header: (untyped routes) -> nil
+
+    def no_routes: (*untyped) -> nil
+  end
+end

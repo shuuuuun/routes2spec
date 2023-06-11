@@ -1,0 +1,27 @@
+module Routes2spec
+  # Routes2spec::Command class
+  class Command < Rails::Command::Base
+    def self.executable: () -> "routes2spec"
+
+    def perform: (*untyped) -> untyped
+
+    # https://github.com/rails/rails/blob/v7.0.4/railties/lib/rails/command/base.rb#L144
+    alias routes2spec perform
+
+    private
+
+    def writing_file: (String relative_path, String content) -> void
+
+    def make_binstubs: () -> void
+
+    def inspector: () -> untyped
+
+    def routes: () -> untyped
+
+    def formatter: () -> untyped
+
+    def routes_filter: () -> untyped
+
+    def formatter_opts: () -> untyped
+  end
+end

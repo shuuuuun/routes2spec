@@ -1,0 +1,12 @@
+module Routes2spec
+  # @private
+  module Logging
+    def debug?: () -> boolish
+
+    def log_debug: (String message) -> ::NilClass
+
+    def log: (String message) -> ::NilClass
+
+    def warn_deprecated: (String message) -> ::NilClass
+  end
+end
