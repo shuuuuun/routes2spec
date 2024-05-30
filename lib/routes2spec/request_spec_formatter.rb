@@ -57,13 +57,17 @@ module Routes2spec
           params_str = param_names.map{|name| "#{name}: \"#{name}\"" }.join(", ")
           path_name = r[:name] || ""
           path_name = grouped_routes.find{ _1[:path] == r[:path] && !_1[:name].empty? }&.fetch(:name) || "" if path_name.empty?
-          Routes2spec.log_debug "verb: #{verb}, path: #{path}, path_name: #{path_name}"
+          Routes2spec.log_debug "verb: #{verb}, path: #{path}, path_name: #{path_name}, @opts: #{@opts}"
           if path_name.empty?
             Routes2spec.log "Skip. No path name! `#{verb&.upcase} #{path}`"
             next
           end
           unless %w[get post patch put delete].include?(verb)
             Routes2spec.log "Skip. Unsupported verb! `#{verb&.upcase} #{path}`"
+            next
+          end
+          if !@opts[:verb].nil? && @opts[:verb].downcase != verb
+            Routes2spec.log "Skip. Not matched specified verb(#{@opts[:verb].upcase})! `#{verb&.upcase} #{path}`"
             next
           end
           endpoint, constraints = r[:reqs].split(" ")

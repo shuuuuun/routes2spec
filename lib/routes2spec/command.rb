@@ -19,6 +19,7 @@ module Routes2spec
     class_option :force_overwrite, banner: "", desc: "Force overwrite files even if they exist."
     class_option :pending, banner: "", desc: "Mark examples as pending."
     class_option :routing, type: :boolean, defalut: false, desc: "Generate routing specs."
+    class_option :verb, desc: "Generate only specific verb. Supported verbs: [GET, POST, PUT, PATCH, DELETE]"
 
     class << self
       def executable
@@ -107,7 +108,7 @@ module Routes2spec
     end
 
     def formatter_opts
-      options.symbolize_keys.slice(:symbol_status, :pending)
+      options.symbolize_keys.slice(:symbol_status, :pending, :verb)
     end
   end
 end
