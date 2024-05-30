@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "Generate Request specs and Routing specs of RSpec, from your Rails routes config. It is useful as a test scaffolding."
   spec.homepage = "https://github.com/shuuuuun/routes2spec"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.7.0"
+  spec.required_ruby_version = ">= 3.1.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/shuuuuun/routes2spec"
