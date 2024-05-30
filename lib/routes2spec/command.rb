@@ -6,6 +6,8 @@ require_relative "./request_spec_formatter"
 module Routes2spec
   # Routes2spec::Command class
   class Command < Rails::Command::Base
+    SUPPORTED_VERBS = Routes2spec::RequestSpecFormatter::SUPPORTED_VERBS
+
     class_option :help, aliases: "-h", banner: "", desc: "Show this message."
     class_option :version, aliases: "-V", banner: "", desc: "Show version."
 
@@ -19,7 +21,7 @@ module Routes2spec
     class_option :force_overwrite, banner: "", desc: "Forcibly overwrites existing files without confirmation."
     class_option :pending, banner: "", desc: "Mark examples as pending."
     class_option :routing, type: :boolean, defalut: false, desc: "Generate routing specs."
-    class_option :verb, desc: "Generate only specific verb. Supported verbs: [GET, POST, PUT, PATCH, DELETE]"
+    class_option :verb, desc: "Generate only specific verb. Supported verbs: [#{SUPPORTED_VERBS.join(", ")}]"
 
     class << self
       def executable
@@ -36,6 +38,11 @@ module Routes2spec
       if options.binstubs?
         make_binstubs
         exit 0
+      end
+
+      if options.verb? && !SUPPORTED_VERBS.include?(options.verb&.downcase)
+        say "Specified verb(#{options.verb}) is not supported! Supported verbs: [#{SUPPORTED_VERBS.join(", ")}]"
+        exit 1
       end
 
       require_application_and_environment!

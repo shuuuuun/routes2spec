@@ -3,6 +3,8 @@
 module Routes2spec
   # Routes2spec::RequestSpecFormatter class
   class RequestSpecFormatter
+    SUPPORTED_VERBS = %w[get post patch put delete].freeze
+
     STATUS = {
       get: 200,
       post: 201,
@@ -62,7 +64,7 @@ module Routes2spec
             Routes2spec.log "Skip. No path name! `#{verb&.upcase} #{path}`"
             next
           end
-          unless %w[get post patch put delete].include?(verb)
+          unless SUPPORTED_VERBS.include?(verb)
             Routes2spec.log "Skip. Unsupported verb! `#{verb&.upcase} #{path}`"
             next
           end
