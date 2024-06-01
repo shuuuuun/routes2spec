@@ -6,6 +6,8 @@
 Generate Request specs and Routing specs of RSpec, from your Rails routes config.
 It is useful as a test scaffolding.
 
+**Currently does not work with Rails 7.**
+
 ## Installation
 
 Add this line to your application's Gemfile:
