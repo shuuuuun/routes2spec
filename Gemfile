@@ -11,3 +11,5 @@ gem "rubocop", "~> 1.21", require: false
 gem "rubocop-rake", require: false
 gem "rubocop-rspec", require: false
 gem "rubocop-rubycw", require: false
+
+gem "listen" # for test
