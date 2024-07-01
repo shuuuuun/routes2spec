@@ -76,14 +76,19 @@ module Routes2spec
           Routes2spec.log_debug "endpoint: #{endpoint}, constraints: #{constraints}"
           # TODO: insert constraints to routing spec
           status = @opts[:symbol_status] ? SYMBOL_STATUS[verb.to_sym] : STATUS[verb.to_sym]
+          use_literal_path = @opts[:literal_path] || false
+          path_helper_str = "#{path_name}_path#{params_str.empty? ? "" : "(#{params_str})"}"
+          literal_path_str = "\"#{path}\""
+          path_str = use_literal_path ? literal_path_str : path_helper_str
           r.merge(
             path: path,
+            path_str: path_str,
             path_name: path_name,
             params_str: params_str,
             reqs: r[:reqs],
             endpoint: endpoint,
             constraints: constraints || "",
-            status: status
+            status: status,
           )
         end.compact
         if routes.empty?

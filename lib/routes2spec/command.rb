@@ -17,6 +17,7 @@ module Routes2spec
                               desc: "Filter by a specific controller, e.g. PostsController or Admin::PostsController."
     class_option :grep, aliases: "-g", desc: "Grep routes by a specific pattern."
     class_option :symbol_status, banner: "", desc: "Use symbols for http status."
+    class_option :literal_path, banner: "", desc: "Use literal paths instead of path helper."
     class_option :overwrite, banner: "", desc: "Prompts for confirmation to overwrite each file if it already exists."
     class_option :force_overwrite, banner: "", desc: "Forcibly overwrites existing files without confirmation."
     class_option :pending, banner: "", desc: "Mark examples as pending."
@@ -115,7 +116,7 @@ module Routes2spec
     end
 
     def formatter_opts
-      options.symbolize_keys.slice(:symbol_status, :pending, :verb)
+      options.symbolize_keys.slice(:symbol_status, :literal_path, :pending, :verb)
     end
   end
 end
